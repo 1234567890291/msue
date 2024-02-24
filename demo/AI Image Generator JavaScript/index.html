@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Image Generator</title>
+  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<link rel="stylesheet" href="/all.min.css"/> 
+<nav style="background-color: #272727;">
+         <div class="logo">
+            <p style="color: #d900ff;">Dit AI</p>
+         </div>
+         <input type="checkbox" id="click">
+         <label for="click" class="menu-btn">
+         <i class="fas fa-bars"></i>
+         </label>
+         <ul>
+            <li><a class="active" href="https://msue.vercel.app">Home</a></li>
+            <li><a href="https://msue.vercel.app/#about">About</a></li>
+            <li><a href="https://msue.vercel.app/#services">Services</a></li>
+            <li><a href="https://msue.vercel.app/#projects">Gallery</a></li>
+            <li><a href="https://msue.vercel.app/#contact">Feedback</a></li>
+         </ul>
+      </nav>
+<body>
+  <section class="image-generator">
+    <div class="content">
+      <h1>AI Image Generator </h1>
+      <p>Convert your text into an image within a second using this
+        powerfull AI Image Generator by Dit.</p>
+      <form action="#" class="generate-form">
+        <input class="prompt-input" type="text" placeholder="Describe what you want to see" required>
+        <div class="controls">
+          <select class="img-quantity">
+            <option class="opt" value="1">1 Image</option>
+            <option class="opt" value="2">2 Images</option>
+            <option class="opt" value="3">3 Images</option>
+            <option class="opt" value="3" selected>4 Images</option>
+            </select>
+          <button type="submit" class="generate-btn">Generate</button>
+        </div>
+      </form>
+    </div>
+    <style>@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+ 
+      nav{
+        box-sizing: border-box;
+        display: flex;
+        height: 80px;
+        width: 100%;
+        background: #1b1b1b;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 50px 0 100px;
+        flex-wrap: wrap;
+      }
+      nav .logo{
+        color: #fff;
+        font-size: 35px;
+        font-weight: 600;
+      }
+      nav ul{
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+      }
+      nav ul li{
+        margin: 0 5px;
+      }
+      nav ul li a{
+        color: #f2f2f2;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 500;
+        padding: 8px 15px;
+        border-radius: 5px;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+      
+      nav .menu-btn i{
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        display: none;
+      }
+      input[type="checkbox"]{
+        display: none;
+      }
+      @media (max-width: 1000px){
+        nav{
+          padding: 0 40px 0 50px;
+        }
+      }
+      @media (max-width: 920px) {
+        nav .menu-btn i{
+          display: block;
+        }
+        #click:checked ~ .menu-btn i:before{
+          content: "\f00d";
+        }
+        nav ul{
+          position: fixed;
+          top: 80px;
+          left: -100%;
+          background: #111;
+          height: 100vh;
+          width: 100%;
+          text-align: center;
+          display: block;
+          transition: all 0.3s ease;
+        }
+        #click:checked ~ ul{
+          left: 0;
+        }
+        nav ul li{
+          width: 100%;
+          margin: 40px 0;
+        }
+        nav ul li a{
+          width: 100%;
+          margin-left: -100%;
+          display: block;
+          font-size: 20px;
+          transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        #click:checked ~ ul li a{
+          margin-left: 0px;
+        }
+        nav ul li a.active,
+        nav ul li a:hover{
+          background: none;
+          color: cyan;
+        }
+      }
+      </style>
+  </section>
+  <section class="image-gallery">
+    <div class="img-card"><img src="images/img-1.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-2.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-3.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-4.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-5.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-6.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-7.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img7.jpg"  style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-8.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-9.jpg" style="border-radius: 100%;" alt="image"></div>
+    <div class="img-card"><img src="images/img-10.jpg" style="border-radius: 100%;" alt="image"></div>
+  </section>
+</body>
+</html>
