@@ -784,3 +784,39 @@ print(f'Sum of {a} and {b} is {sum(a, b)}')\n\
 <!--slide bar-->
 
   <!--slide bar-->
+<!--ads-->
+        <div id="myPopup" class="popup-card">
+        <!-- Your popup content goes here -->
+        <p>This is a repeating popup!</p>
+        <button id="close-btn">Close</button>
+    </div>
+<style>        .popup-card {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }</style>
+    <script>
+        let popup = document.getElementById("myPopup");
+        let closeBtn = document.getElementById("close-btn");
+
+        function showPopup() {
+            popup.style.display = "block"; // Show the popup
+            setTimeout(() => {
+                popup.style.display = "none"; // Hide the popup after 10 seconds
+                showPopup(); // Repeat the process
+            }, 60000); // 10 seconds in milliseconds
+        }
+
+        // Call the showPopup function to start the loop
+        showPopup();
+
+        // Optional: Close the popup when the close button is clicked
+        closeBtn.addEventListener("click", () => {
+            popup.style.display = "none";
+        });
+    </script>
