@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Web Browser</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f8f8;
+      transition: background-color 0.5s ease;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #header {
+      background-color: #0078d4;
+      color: white;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      #header {}
+    }
+
+    #input-box {
+      flex-grow: 1;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 8px;
+      font-size: 14px;
+      background-color: #fff;
+      color: #333;
+    }
+
+    #iframe {
+      flex-grow: 1;
+      border: none;
+    }
+
+    .button {
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 8px;
+      margin: 5px;
+      font-size: 14px;
+    }
+
+    .button:hover {
+      background-color: #106ba1;
+    }
+
+    .ExpandButton {
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .ExpandButton:hover {
+      background-color: #106ba1;
+    }
+
+    .TitleMenuButton,
+    .OptionMenuButton {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 14px;
+      color: #333;
+      background-color: white;
+    }
+
+    .TheHubMenuButton {
+      color: green;
+      background-color: black;
+    }
+
+    select {
+      padding: 8px;
+      font-size: 14px;
+      background-color: #fff;
+      color: #333;
+    }
+    .container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+
+    .responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+      <button class="button" id="back-button" onclick="goBack()" title="Go back a page">&lt;</button>
+      <button class="button" id="forward-button" onclick="goForward()" title="Go forward a page">&gt;</button>
+      <button class="button" id="home-button" onclick="goHome()" title="Go Home">Home</button>
+      <button class="button" id="refresh-button" onclick="refresh()" title="Refresh the page">Reload</button>
+      <input id="input-box" type="text" placeholder="Enter FULL URL here..." value="https://" title="Enter a URL">
+      <button class="button" id="go-button" onclick="go()" title="Go to URL">Go</button>
+      <a href="https://www.bing.com/"><button class="button" title="Exit the browser">X</button></a>
+
+      <select id="settings-dropdown" class="ExpandButton" title="Settings and customization">
+        <option value="">Settings</option>
+        <option value="">-------------</option>
+        <option value="" class="TitleMenuButton">Viewing Modes</option>
+        <option value="">-------------</option>
+        <option value="light-mode" class="OptionMenuButton">Light Mode</option>
+        <option value="dark-mode" class="OptionMenuButton">Dark Mode</option>
+        <!--<a href="https://msue.vercel.app">Developer Info</a>-->
+      </select>
+    </div>
+    <div class="container"> 
+        <iframe class="responsive-iframe" id="iframe" src="main.html"></iframe>
+      </div>
+    <!--<iframe id="iframe" src="https://www.bing.com/"></iframe>-->
+  </div>
+
+  <script>
+    function go() {
+      var inputBox = document.getElementById("input-box");
+      var iframe = document.getElementById("iframe");
+      var url = inputBox.value;
+      if (url) {
+        iframe.src = url;
+        history.pushState(null, null, url);
+        updateButtons();
+      }
+    }
+
+    function refresh() {
+      var iframe = document.getElementById("iframe");
+      iframe.src = iframe.src;
+    }
+
+    function goHome() {
+      var iframe = document.getElementById("iframe");
+      iframe.src = "https://www.bing.com/";
+    }
+
+    function goBack() {
+      var iframe = document.getElementById("iframe");
+      iframe.contentWindow.history.back();
+    }
+
+    function goForward() {
+      var iframe = document.getElementById("iframe");
+      iframe.contentWindow.history.forward();
+    }
+
+    function updateButtons() {
+      // Add your button update logic here
+    }
+    // Add dark mode functionality
+    const settingsDropdown = document.getElementById("settings-dropdown");
+    const header = document.getElementById("header");
+    const buttons = document.querySelectorAll(".button");
+    const dropdownOptions = document.querySelectorAll(".ExpandButton, .TitleMenuButton, .OptionMenuButton, .TheHubMenuButton");
+    settingsDropdown.addEventListener("change", function() {
+      const darkMode = this.value === "dark-mode";
+      document.body.classList.toggle("dark-mode", darkMode);
+      header.style.backgroundColor = darkMode ? "#333" : "#0078d4";
+      buttons.forEach(button => {
+        button.style.backgroundColor = darkMode ? "#333" : "#0078d4";
+        button.style.color = darkMode ? "white" : "black";
+      });
+      // Update background color of dropdown options
+      dropdownOptions.forEach(option => {
+        option.style.backgroundColor = darkMode ? "#333" : "#0078d4";
+        option.style.color = darkMode ? "white" : "#333";
+      });
+      // For light mode, you can set specific styles for buttons
+      if (!darkMode) {
+        buttons.forEach(button => {
+          button.style.backgroundColor = "#0078d4"; // Light mode button background color
+          button.style.color = "white"; // Light mode button text color
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

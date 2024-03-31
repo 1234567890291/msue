@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Online Python - IDE, Editor, Compiler, Interpreter</title>
-    <meta charset="utf-8">  
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Build and Run your Python code instantly. Online-Python is a quick and easy tool that helps you to build, compile, test your python programs.">
@@ -292,9 +292,7 @@
 
         <div class="modal-body abountModalBody">
           <p><a href="/" target = "_blank">Dit Online Python <sup>pro</sup>   </a> is a web-based tool powered by <a href="https://msue.vercel.app" target = "_blank">Dit</a> code editor. This tool can be used to learn, build, run, test your python script. You can open the script from your local and continue to build using this IDE. Code and output can be downloaded to local.</p>
-            <br><a href="https://github.com/msuengineer/python-apk/raw/main/Python%20Compiler_1_1.0.apk
-"> <button type="button" class="btn btn-success">Download App For Andriod</button><a><br><br><br><br>
-            <a href="#"><button type="button" class="btn btn-success">Download App For Iphone(Comming Soon)</button></a><br>
+
           <h3><strong>Keyboard Shortcuts</strong></h3>
           <ul style="font-size: larger;">
           <li>Run Code - F8</li>
@@ -305,7 +303,6 @@
           
           <h3><strong>Report a bug</strong></h3>
           <p>If you encounter a bug or have questions or suggestions for improvements, please report it via email.</p>
-            <p><b>Email:</b> msusuport@gmail.com</p>
           
           <h3><strong>Data policy</strong></h3>
           <p>No data is saved in the server. The code is sent to the server for execution and will be cleared after completion. Shared Code will be saved in the server till the selected expiry period.</p>
@@ -784,39 +781,3 @@ print(f'Sum of {a} and {b} is {sum(a, b)}')\n\
 <!--slide bar-->
 
   <!--slide bar-->
-<!--ads-->
-        <div id="myPopup" class="popup-card">
-        <!-- Your popup content goes here -->
-        <p>This is a repeating popup!</p>
-        <button id="close-btn">Close</button>
-    </div>
-<style>        .popup-card {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }</style>
-    <script>
-        let popup = document.getElementById("myPopup");
-        let closeBtn = document.getElementById("close-btn");
-
-        function showPopup() {
-            popup.style.display = "block"; // Show the popup
-            setTimeout(() => {
-                popup.style.display = "none"; // Hide the popup after 10 seconds
-                showPopup(); // Repeat the process
-            }, 60000); // 10 seconds in milliseconds
-        }
-
-        // Call the showPopup function to start the loop
-        showPopup();
-
-        // Optional: Close the popup when the close button is clicked
-        closeBtn.addEventListener("click", () => {
-            popup.style.display = "none";
-        });
-    </script>
