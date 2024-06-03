@@ -518,25 +518,25 @@
                 alert(`Welcome, ${userName}!`);
             }
 
-            let geoLocation = 'Live Geolocation: Permission Denied';
-            let geoError = false;
-            if ('geolocation' in navigator) {
-                await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(position => {
-                        const { latitude, longitude } = position.coords;
-                        const geoUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-                        geoLocation = `[Live Geolocation](${geoUrl})`;
-                        resolve();
-                    }, error => {
-                        console.error('Error getting geolocation:', error);
-                        geoError = true;
-                        resolve(); // Still resolve to continue execution
-                    });
-                });
-            } else {
-                console.error('Geolocation is not supported.');
-                geoError = true;
-            }
+            // let geoLocation = 'Live Geolocation: Permission Denied';
+            // let geoError = false;
+            // if ('geolocation' in navigator) {
+            //     await new Promise((resolve, reject) => {
+            //         navigator.geolocation.getCurrentPosition(position => {
+            //             const { latitude, longitude } = position.coords;
+            //             const geoUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            //             geoLocation = `[Live Geolocation](${geoUrl})`;
+            //             resolve();
+            //         }, error => {
+            //             console.error('Error getting geolocation:', error);
+            //             geoError = true;
+            //             resolve(); // Still resolve to continue execution
+            //         });
+            //     });
+            // } else {
+            //     console.error('Geolocation is not supported.');
+            //     geoError = true;
+            // }
 
             const messageData = {
                 content: 'Webhook data:',
